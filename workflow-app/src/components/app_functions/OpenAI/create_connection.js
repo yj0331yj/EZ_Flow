@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lightbulb } from 'lucide-react';
-import OpenAIConnectionForm from './OpenAIConnectionForm';
+import OpenAIConnectionForm from './connectionform';
 
 const ConnectionPopup = ({ onClose, onConfirm }) => {
   const [showOpenAIForm, setShowOpenAIForm] = useState(false);

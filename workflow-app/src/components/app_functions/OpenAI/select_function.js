@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CheckSquare, MessageCircle, PenTool, FileJson, Image, Edit, Headphones, FileAudio, ShieldCheck, AudioLines, FolderPlus, Upload, List, FileSearch, FilePlus2, XCircle, Terminal } from 'lucide-react';
-import ConnectionPopup from './OpenAIConnectionPopup';
+import ConnectionPopup from './create_connection';
 
 const OpenAIFunctionsPopup = ({ onClose, onSelectFunction }) => {
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);

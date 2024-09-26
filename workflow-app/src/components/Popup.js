@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, FileSpreadsheet, Mail, MessageSquare, Brain, Calendar, Cloud, Database, FileText, Trello, GitBranch, Linkedin, Facebook, Instagram, Globe, Rss, Share2, Code } from 'lucide-react';
-import OpenAIFunctionsPopup from './app_functions/OpenAI/OpenAIFunctionsPopup';
+import OpenAIFunctionsPopup from './app_functions/OpenAI/select_function.js';
 import NotionFunctionsPopup from './NotionFunctionsPopup';
 
 const AppItem = ({ icon, name, count, color, onSelect }) => (
