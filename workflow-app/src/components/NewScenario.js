@@ -17,10 +17,10 @@ export const NewScenario = ({ isExpanded }) => {
   const dragStartPos = useRef({ x: 0, y: 0 });
   const isDragging = useRef(false);
 
-  useEffect(() => {
+  const createInitialCircle = () => {
     const centerX = window.innerWidth / 2 - MAIN_CIRCLE_SIZE / 2;
     const centerY = window.innerHeight / 2 - MAIN_CIRCLE_SIZE / 2;
-    setCircles([{
+    return {
       icon: <Plus size={40} />,
       key: 0,
       x: centerX,
@@ -29,7 +29,11 @@ export const NewScenario = ({ isExpanded }) => {
       parentIndex: null,
       showPlusButton: false,
       isFirstCircle: true
-    }]);
+    };
+  };
+
+  useEffect(() => {
+    setCircles([createInitialCircle()]);
     setSvgSize({ width: window.innerWidth, height: window.innerHeight });
   }, []);
 
@@ -132,9 +136,10 @@ export const NewScenario = ({ isExpanded }) => {
 
   const handleDeleteCircle = (index) => {
     setCircles(prevCircles => {
-      const newCircles = prevCircles.filter((_, i) => i !== index);
+      let newCircles = prevCircles.filter((_, i) => i !== index);
+      
       // Update parentIndex for remaining circles
-      return newCircles.map(circle => {
+      newCircles = newCircles.map(circle => {
         if (circle.parentIndex === index) {
           return { ...circle, parentIndex: null };
         } else if (circle.parentIndex > index) {
@@ -142,7 +147,17 @@ export const NewScenario = ({ isExpanded }) => {
         }
         return circle;
       });
+
+      // If all app nodes are deleted, create an initial circle
+      if (newCircles.length === 0 || (newCircles.length === 1 && newCircles[0].isFirstCircle)) {
+        return [createInitialCircle()];
+      }
+
+      return newCircles;
     });
+    
+    // Close the popup after deleting the circle
+    setShowPopup(false);
   };
 
   const handleBackgroundDragStart = (e) => {

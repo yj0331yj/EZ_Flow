@@ -125,7 +125,9 @@ const OpenAIFunctionsPopup = ({ onClose, onSelectFunction }) => {
                 className="p-4 border rounded-md hover:bg-gray-100 text-left flex items-center"
                 onClick={() => handleFunctionSelect(func)}
               >
-                {func.icon}
+                <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                  {func.icon}
+                </div>
                 <div className="ml-4">
                   <div className="font-semibold">{func.name}</div>
                   <div className="text-sm text-gray-600">{func.description}</div>

@@ -6,9 +6,17 @@ const NotionConnectionPopup = ({ onClose, onConfirm }) => {
   const [connectionName, setConnectionName] = useState('');
   const [internalIntegrationToken, setInternalIntegrationToken] = useState('');
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [clientId, setClientId] = useState('');
+  const [clientSecret, setClientSecret] = useState('');
 
   const handleSave = () => {
-    onConfirm({ connectionType, connectionName, internalIntegrationToken });
+    const connectionData = {
+      connectionType,
+      connectionName,
+      ...(connectionType === 'notion_internal' && { internalIntegrationToken }),
+      ...(connectionType === 'notion_public' && showAdvancedSettings && { clientId, clientSecret }),
+    };
+    onConfirm(connectionData);
     onClose();
   };
 
@@ -26,7 +34,10 @@ const NotionConnectionPopup = ({ onClose, onConfirm }) => {
               <div className="relative">
                 <select
                   value={connectionType}
-                  onChange={(e) => setConnectionType(e.target.value)}
+                  onChange={(e) => {
+                    setConnectionType(e.target.value);
+                    setShowAdvancedSettings(false);
+                  }}
                   className="w-full p-2 border rounded-md appearance-none bg-white"
                 >
                   <option value="">선택하세요</option>
@@ -48,7 +59,7 @@ const NotionConnectionPopup = ({ onClose, onConfirm }) => {
                   value={connectionName}
                   onChange={(e) => setConnectionName(e.target.value)}
                   className="w-full p-2 border rounded-md"
-                  placeholder="My Notion Public connection"
+                  placeholder="내 Notion Public 연결"
                 />
               </div>
             )}
@@ -57,34 +68,67 @@ const NotionConnectionPopup = ({ onClose, onConfirm }) => {
               <div>
                 <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                   <ChevronDown size={16} className="mr-1" />
-                  Internal Integration Token
+                  내부 통합 토큰
                 </label>
                 <input
                   type="password"
                   value={internalIntegrationToken}
                   onChange={(e) => setInternalIntegrationToken(e.target.value)}
                   className="w-full p-2 border rounded-md"
-                  placeholder="Enter your Internal Integration Token"
+                  placeholder="내부 통합 토큰을 입력하세요"
                 />
               </div>
             )}
-          </div>
 
-          <div className="mt-4 flex items-center">
-            <input
-              type="checkbox"
-              id="showAdvancedSettings"
-              checked={showAdvancedSettings}
-              onChange={(e) => setShowAdvancedSettings(e.target.checked)}
-              className="mr-2"
-            />
-            <label htmlFor="showAdvancedSettings" className="text-sm text-gray-600">Show advanced settings</label>
+            {connectionType === 'notion_public' && (
+              <div className="mt-4 flex items-center">
+                <input
+                  type="checkbox"
+                  id="showAdvancedSettings"
+                  checked={showAdvancedSettings}
+                  onChange={(e) => setShowAdvancedSettings(e.target.checked)}
+                  className="mr-2"
+                />
+                <label htmlFor="showAdvancedSettings" className="text-sm text-gray-600">고급 설정 표시</label>
+              </div>
+            )}
+
+            {connectionType === 'notion_public' && showAdvancedSettings && (
+              <>
+                <div>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <ChevronDown size={16} className="mr-1" />
+                    클라이언트 ID
+                  </label>
+                  <input
+                    type="text"
+                    value={clientId}
+                    onChange={(e) => setClientId(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                    placeholder="클라이언트 ID를 입력하세요"
+                  />
+                </div>
+                <div>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <ChevronDown size={16} className="mr-1" />
+                    클라이언트 시크릿
+                  </label>
+                  <input
+                    type="password"
+                    value={clientSecret}
+                    onChange={(e) => setClientSecret(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                    placeholder="클라이언트 시크릿을 입력하세요"
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           <div className="flex items-start mt-4">
             <Lightbulb className="text-yellow-400 mr-2 mt-1" size={20} />
             <p className="text-gray-600 text-sm">
-              Notion에 대한 연결을 생성하는 방법에 대한 자세한 정보는 <a href="#" className="text-purple-600 hover:underline">온라인 도움말</a>을 참조하세요.
+              Notion 연결 생성 방법에 대한 자세한 정보는 <a href="#" className="text-purple-600 hover:underline">온라인 도움말</a>을 참조하세요.
             </p>
           </div>
         </div>
@@ -98,7 +142,9 @@ const NotionConnectionPopup = ({ onClose, onConfirm }) => {
           <button
             onClick={handleSave}
             className="px-4 py-2 bg-purple-600 text-white rounded-md"
-            disabled={!connectionType || !connectionName || (connectionType === 'notion_internal' && !internalIntegrationToken)}
+            disabled={!connectionType || !connectionName || 
+              (connectionType === 'notion_internal' && !internalIntegrationToken) ||
+              (connectionType === 'notion_public' && showAdvancedSettings && (!clientId || !clientSecret))}
           >
             저장
           </button>
