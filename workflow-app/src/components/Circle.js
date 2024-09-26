@@ -1,10 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { MAIN_CIRCLE_SIZE, PLUS_BUTTON_SIZE } from './constants';
 
-const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, handleDragStop, addNewCircle }, ref) => {
+const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, handleDragStop, addNewCircle, onDeleteCircle }, ref) => {
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+  const contextMenuRef = useRef(null);
   const isAppSelected = circle.name && !circle.isFirstCircle;
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+        setShowContextMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    if (isAppSelected) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setContextMenuPosition({ 
+        x: e.clientX - rect.left, 
+        y: e.clientY - rect.top 
+      });
+      setShowContextMenu(true);
+    }
+  };
+
+  const handleDeleteModule = () => {
+    if (typeof onDeleteCircle === 'function') {
+      onDeleteCircle(index);
+    } else {
+      console.error('onDeleteCircle is not a function');
+    }
+    setShowContextMenu(false);
+  };
 
   return (
     <Draggable
@@ -13,7 +50,7 @@ const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, h
       onStop={(e, data) => handleDragStop(index, e, data)}
       position={{x: circle.x, y: circle.y}}
     >
-      <div className="absolute circle-container flex flex-col items-center">
+      <div className="absolute circle-container flex flex-col items-center" onContextMenu={handleContextMenu}>
         <div
           ref={ref}
           className={`
@@ -47,6 +84,21 @@ const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, h
           </div>
           {circle.subLabel && <div className="text-xs text-gray-600">{circle.subLabel}</div>}
         </div>
+        {showContextMenu && (
+          <div
+            ref={contextMenuRef}
+            className="absolute bg-white shadow-md rounded-md py-1 z-50"
+            style={{ left: contextMenuPosition.x, top: contextMenuPosition.y }}
+          >
+            <button
+              className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100 w-full"
+              onClick={handleDeleteModule}
+            >
+              <Trash2 size={16} className="mr-2" />
+              모듈 삭제
+            </button>
+          </div>
+        )}
       </div>
     </Draggable>
   );

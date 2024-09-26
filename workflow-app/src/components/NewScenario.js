@@ -130,6 +130,21 @@ export const NewScenario = ({ isExpanded }) => {
     setShowPopup(circles.length);
   };
 
+  const handleDeleteCircle = (index) => {
+    setCircles(prevCircles => {
+      const newCircles = prevCircles.filter((_, i) => i !== index);
+      // Update parentIndex for remaining circles
+      return newCircles.map(circle => {
+        if (circle.parentIndex === index) {
+          return { ...circle, parentIndex: null };
+        } else if (circle.parentIndex > index) {
+          return { ...circle, parentIndex: circle.parentIndex - 1 };
+        }
+        return circle;
+      });
+    });
+  };
+
   const handleBackgroundDragStart = (e) => {
     if (!e.target.closest('.circle-container')) {
       isDragging.current = true;
@@ -230,6 +245,7 @@ export const NewScenario = ({ isExpanded }) => {
             handleDrag={handleCircleDrag}
             handleDragStop={handleCircleDragStop}
             addNewCircle={addNewCircle}
+            onDeleteCircle={handleDeleteCircle}
             ref={el => circleRefs.current[index] = el}
           />
         ))}

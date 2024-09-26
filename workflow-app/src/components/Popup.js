@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, FileSpreadsheet, Mail, MessageSquare, Brain, Calendar, Cloud, Database, FileText, Trello, GitBranch, Linkedin, Facebook, Instagram, Globe, Rss, Share2, Code } from 'lucide-react';
 import OpenAIFunctionsPopup from './app_functions/OpenAI/select_function.js';
-import NotionFunctionsPopup from './NotionFunctionsPopup';
+import NotionFunctionsPopup from './app_functions/Notion/select_function.js';
 
 const AppItem = ({ icon, name, count, color, onSelect }) => (
   <div className="flex flex-col items-center p-2 hover:bg-gray-100 cursor-pointer" onClick={() => onSelect({ icon, name, color })}>
