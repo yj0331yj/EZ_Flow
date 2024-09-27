@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Search, FileSpreadsheet, Mail, MessageSquare, Brain, Calendar, Cloud, Database, FileText, Trello, GitBranch, Linkedin, Facebook, Instagram, Globe, Rss, Share2, Code } from 'lucide-react';
 import OpenAIFunctionsPopup from './app_functions/OpenAI/select_function.js';
 import NotionFunctionsPopup from './app_functions/Notion/select_function.js';
+import GitHubFunctionsPopup from './app_functions/Github/select_function.js';
+import SlackFunctionsPopup from './app_functions/Slack/select_function.js';
+import InstagramFunctionsPopup from './app_functions/Instagram/select_function.js';
 
 const AppItem = ({ icon, name, count, color, onSelect }) => (
   <div className="flex flex-col items-center p-2 hover:bg-gray-100 cursor-pointer" onClick={() => onSelect({ icon, name, color })}>
-    <div className={`p-4 rounded-full mb-2`} style={{ backgroundColor: color }}>
+    <div className="p-4 rounded-full mb-2" style={{ backgroundColor: color }}>
       {React.cloneElement(icon, { color: 'white', size: 32 })}
     </div>
     <span className="text-center text-sm font-medium">{name}</span>
@@ -23,12 +26,21 @@ const XIcon = ({ size, color }) => (
 const Popup = ({ onClose, isExpanded, onSelectIcon }) => {
   const [showOpenAIFunctions, setShowOpenAIFunctions] = useState(false);
   const [showNotionFunctions, setShowNotionFunctions] = useState(false);
+  const [showGitHubFunctions, setShowGitHubFunctions] = useState(false);
+  const [showSlackFunctions, setShowSlackFunctions] = useState(false);
+  const [showInstagramFunctions, setShowInstagramFunctions] = useState(false);
 
   const handleSelectIcon = (iconData) => {
     if (iconData.name === "OpenAI") {
       setShowOpenAIFunctions(true);
     } else if (iconData.name === "Notion") {
       setShowNotionFunctions(true);
+    } else if (iconData.name === "GitHub") {
+      setShowGitHubFunctions(true);
+    } else if (iconData.name === "Slack") {
+      setShowSlackFunctions(true);
+    } else if (iconData.name === "Instagram") {
+      setShowInstagramFunctions(true);
     } else {
       onSelectIcon(iconData);
       onClose();
@@ -44,6 +56,18 @@ const Popup = ({ onClose, isExpanded, onSelectIcon }) => {
     onSelectIcon({ ...functionData, icon: <FileText size={24} />, color: "#000000" });
     onClose();
   };
+  const handleSelectGitHubFunction = (functionData) => {
+    onSelectIcon({ ...functionData, icon: <GitBranch size={24} />, color: "#181717" });
+    onClose();
+  };
+  const handleSelectSlackFunction = (functionData) => {
+    onSelectIcon({ ...functionData, icon: <MessageSquare size={24} />, color: "#4A154B" });
+    onClose();
+  };
+  const handleSelectInstagramFunction = (functionData) => {
+    onSelectIcon({ ...functionData, icon: <Instagram size={24} />, color: "#E4405F" });
+    onClose();
+  };
 
   if (showOpenAIFunctions) {
     return <OpenAIFunctionsPopup onClose={() => setShowOpenAIFunctions(false)} onSelectFunction={handleSelectOpenAIFunction} />;
@@ -52,7 +76,15 @@ const Popup = ({ onClose, isExpanded, onSelectIcon }) => {
   if (showNotionFunctions) {
     return <NotionFunctionsPopup onClose={() => setShowNotionFunctions(false)} onSelectFunction={handleSelectNotionFunction} />;
   }
-
+  if (showGitHubFunctions) {
+    return <GitHubFunctionsPopup onClose={() => setShowGitHubFunctions(false)} onSelectFunction={handleSelectGitHubFunction} />;
+  }
+  if (showSlackFunctions) {
+    return <SlackFunctionsPopup onClose={() => setShowSlackFunctions(false)} onSelectFunction={handleSelectSlackFunction} />;
+  }
+  if (showInstagramFunctions) {
+    return <InstagramFunctionsPopup onClose={() => setShowInstagramFunctions(false)} onSelectFunction={handleSelectInstagramFunction} />;
+  }
   return (
     <>
       <div
