@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Spoqa Han Sans Neo';
+  src: url('../public/fonts/SpoqaHanSansNeo-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Spoqa Han Sans Neo', sans-serif;
+}
+
+
