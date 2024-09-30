@@ -137,16 +137,31 @@ export const NewScenario = ({ isExpanded }) => {
   const handleDeleteCircle = (index) => {
     setCircles(prevCircles => {
       let newCircles = prevCircles.filter((_, i) => i !== index);
-      
+
+      // Find the parent and children of the deleted circle
+      const deletedCircle = prevCircles[index];
+      const parentIndex = deletedCircle.parentIndex;
+      const childrenIndices = prevCircles.filter(circle => circle.parentIndex === index).map((_, i) => i);
+
       // Update parentIndex for remaining circles
       newCircles = newCircles.map(circle => {
         if (circle.parentIndex === index) {
-          return { ...circle, parentIndex: null };
+          // Set the parent of deleted circle as the new parent
+          return { ...circle, parentIndex: parentIndex };
         } else if (circle.parentIndex > index) {
+          // Decrement parentIndex for circles that come after the deleted one
           return { ...circle, parentIndex: circle.parentIndex - 1 };
         }
         return circle;
       });
+
+      // Reconnect the parent with the children of the deleted circle
+      if (parentIndex !== null) {
+        const parentCircle = newCircles.find((_, i) => i === parentIndex);
+        if (parentCircle) {
+          parentCircle.showPlusButton = true;
+        }
+      }
 
       // If all app nodes are deleted, create an initial circle
       if (newCircles.length === 0 || (newCircles.length === 1 && newCircles[0].isFirstCircle)) {

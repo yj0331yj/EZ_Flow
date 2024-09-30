@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, FileSpreadsheet, Mail, MessageSquare, Brain, Calendar, Cloud, Database, FileText, Trello, GitBranch, Linkedin, Facebook, Instagram, Globe, Rss, Share2, Code } from 'lucide-react';
+import { Search, FileSpreadsheet, Mail, MessageSquare, Brain, Calendar, Cloud, Database, FileText, Trello, GitBranch, Linkedin, Facebook, Instagram, Globe, Rss, Share2, Code, Youtube } from 'lucide-react';
 import OpenAIFunctionsPopup from './app_functions/OpenAI/select_function.js';
 import NotionFunctionsPopup from './app_functions/Notion/select_function.js';
 import GitHubFunctionsPopup from './app_functions/Github/select_function.js';
@@ -20,6 +20,24 @@ const XIcon = ({ size, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4.5 3.75L19.5 20.25" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M19.5 3.75L4.5 20.25" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const KakaoIcon = ({ size, color }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 3C6.477 3 2 6.477 2 12C2 17.523 6.477 21 12 21C17.523 21 22 17.523 22 12C22 6.477 17.523 3 12 3ZM16.5 13H13V16.5C13 17.053 12.553 17.5 12 17.5C11.447 17.5 11 17.053 11 16.5V13H7.5C6.947 13 6.5 12.553 6.5 12C6.5 11.447 6.947 11 7.5 11H11V7.5C11 6.947 11.447 6.5 12 6.5C12.553 6.5 13 6.947 13 7.5V11H16.5C17.053 11 17.5 11.447 17.5 12C17.5 12.553 17.053 13 16.5 13Z" fill={color}/>
+  </svg>
+);
+
+const TossIcon = ({ size, color }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill={color}/>
+  </svg>
+);
+
+const NaverIcon = ({ size, color }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16.273 3H7.727C5.119 3 3 5.119 3 7.727V16.273C3 18.881 5.119 21 7.727 21H16.273C18.881 21 21 18.881 21 16.273V7.727C21 5.119 18.881 3 16.273 3ZM15.934 13.414L11.414 19H8.066V5H11.414V10.586L15.934 5H19.282L14.066 11.414L19.282 19H15.934V13.414Z" fill={color}/>
   </svg>
 );
 
@@ -128,12 +146,16 @@ const Popup = ({ onClose, isExpanded, onSelectIcon }) => {
               <AppItem icon={<Globe size={24} />} name="HTTP" count={8} color="#0000FF" onSelect={handleSelectIcon} />
               <AppItem icon={<Rss size={24} />} name="RSS" count={5} color="#FFA500" onSelect={handleSelectIcon} />
               <AppItem icon={<Code size={24} />} name="Text parser" count={7} color="#FF6347" onSelect={handleSelectIcon} />
+              <AppItem icon={<KakaoIcon size={24} />} name="Kakao" count={6} color="#FFE812" onSelect={handleSelectIcon} />
+              <AppItem icon={<TossIcon size={24} />} name="Toss" count={3} color="#0064FF" onSelect={handleSelectIcon} />
+              <AppItem icon={<NaverIcon size={24} />} name="Naver" count={5} color="#03C75A" onSelect={handleSelectIcon} />
+              <AppItem icon={<Youtube size={24} />} name="YouTube" count={9} color="#FF0000" onSelect={handleSelectIcon} />
             </div>
           </div>
           <div className="p-6 border-t">
             <button
               onClick={onClose}
-              className="w-full py-2 bg-red-500 text-white rounded-md"
+              className="w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200"
             >
               닫기
             </button>
