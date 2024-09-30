@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { GitCommit, GitFork, Users, User, FileText, Search, Code, GitBranch, Tag, AlertCircle, GitPullRequest, File, Flag, UserPlus, Database, Eye } from 'lucide-react';
-import GitHubConnectionPopup from './connection_form';
+import GitHubCreateConnection from './create_connection';
 
 const GitHubFunctionsPopup = ({ onClose, onSelectFunction }) => {
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
   const [selectedFunction, setSelectedFunction] = useState(null);
 
   const functions = [
-    {
-      name: "커밋 감시",
+    { 
+      name: "커밋 감시", 
       description: "새 커밋이 생성되면 트리거됩니다.",
       icon: <GitCommit size={24} />
     },
@@ -230,7 +230,7 @@ const GitHubFunctionsPopup = ({ onClose, onSelectFunction }) => {
   };
 
   if (showConnectionPopup) {
-    return <GitHubConnectionPopup onClose={() => setShowConnectionPopup(false)} onConfirm={handleConfirmConnection} />;
+    return <GitHubCreateConnection onClose={() => setShowConnectionPopup(false)} onSave={handleConfirmConnection} />;
   }
 
   return (
