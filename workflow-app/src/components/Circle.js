@@ -30,7 +30,6 @@ const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, h
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      // Set the position directly to the click point
       setContextMenuPosition({ x, y });
       setShowContextMenu(true);
     }
@@ -43,6 +42,16 @@ const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, h
       console.error('onDeleteCircle is not a function');
     }
     setShowContextMenu(false);
+  };
+
+  const renderIcon = () => {
+    if (typeof circle.icon === 'string') {
+      return <img src={circle.icon} alt={circle.name} className="w-8 h-8 pointer-events-none" />;
+    } else if (React.isValidElement(circle.icon)) {
+      return React.cloneElement(circle.icon, { size: 40, color: 'white', className: "pointer-events-none" });
+    } else {
+      return <span className="text-white text-2xl pointer-events-none">{circle.name.charAt(0)}</span>;
+    }
   };
 
   return (
@@ -63,7 +72,7 @@ const Circle = React.forwardRef(({ circle, index, handleDragStart, handleDrag, h
           style={{ backgroundColor: circle.color }}
           onContextMenu={handleContextMenu}
         >
-          {React.cloneElement(circle.icon, { size: 40, color: 'white' })}
+          {renderIcon()}
           {circle.showPlusButton && (
             <button
               className="absolute flex items-center justify-center text-white cursor-pointer z-10 shadow-[0_4px_15px_rgba(0,0,0,0.2),inset_0_-10px_10px_-10px_rgba(255,255,255,1),inset_0_10px_10px_-10px_rgba(255,255,255,1)]"
